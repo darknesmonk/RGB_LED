@@ -1,10 +1,10 @@
 RAM Allocation
 Variable                                                          Address   Size
 --------------------------------------------------------------------------------
-count                                                             0x0160       1
-step                                                              0x0161       1
-sr                                                                0x0162       1
-rgb                                                               0x0163     576
+count                                                             0x00A0       1
+step                                                              0x00A1       1
+sr                                                                0x00A2       1
+rgb                                                               0x00A3     912
 
 EEPROM Allocation
 Variable                                                          Address   Size

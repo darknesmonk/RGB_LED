@@ -26,7 +26,7 @@ Data Stack size         : 256
 #include <mega8.h>
 #include <delay.h>
 #include <sleep.h>
-#define ALL 12 + 1
+#define ALL 13 + 1
 
   volatile unsigned char count=0,step=0,sr=0;
   unsigned char rgb[38][3][8] = {0}; 
@@ -90,9 +90,9 @@ for(i=0; i<8 ; i++)
  g=(0x07E0 & c) >>5;
  b=(0x001F & c);  
  
- rgb[j][0][i] =(float)r/31 * 110;
- rgb[j][1][i] =(float)g/63  * 130;
- rgb[j][2][i] = (float)b/31 * 130;  
+ rgb[j][0][i] =(float)r/31 * 150;
+ rgb[j][1][i] =(float)g/63  * 170;
+ rgb[j][2][i] = (float)b/31 * 170;  
  
 }
 }
@@ -233,7 +233,8 @@ MCUCSR=0; if(type>=ALL) {  type=0; sleep(); }
          case 9:  conv(pp9,sizeof(pp9)); break;
           case 10:  conv(pp10,sizeof(pp10)); break;      
            case 11:  conv(pp11,sizeof(pp11)); break;
-            case 12:  conv(pp12,sizeof(pp12)); break;
+            case 12:  conv(pp12,sizeof(pp12)); break;   
+            case 13:  conv(pp13,sizeof(pp13)); break;
   }
    
  #asm("sei")

@@ -90,9 +90,9 @@ for(i=0; i<8 ; i++)
  g=(0x07E0 & c) >>5;
  b=(0x001F & c);  
  
- rgb[j][0][i] =(float)r/31 * 110;
- rgb[j][1][i] =(float)g/63  * 130;
- rgb[j][2][i] = (float)b/31 * 130;  
+ rgb[j][0][i] =(float)r/31 * 130;
+ rgb[j][1][i] =(float)g/63  * 150;
+ rgb[j][2][i] = (float)b/31 * 150;  
  
 }
 }

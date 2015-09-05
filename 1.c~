@@ -65,7 +65,6 @@ step=(step>=sr)?0:(step+1);
 void sleep()
 {
 MCUCR=0x00; 
-PORTB=DDRB=PORTC=DDRC=PORTD=DDRD=TCCR2=TCCR0=TCCR1B=TCCR1A=0x00;
 #asm("cli");
  sleep_enable(); 
  powerdown();

@@ -1880,28 +1880,24 @@ _0x6:
 ;void sleep()
 ; 0000 0042 {
 _sleep:
-; 0000 0043 //unsigned char x;
-; 0000 0044 //x = (MCUCR & ~(1 << BODSE)) | (1 << BODS); // подготовка бит
-; 0000 0045 //MCUCR = x | (1 << BODSE); // процедура отключения BOD
-; 0000 0046 //MCUCR = x;
-; 0000 0047 MCUCR=0x00;
+; 0000 0043 MCUCR=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x35,R30
-; 0000 0048 #asm("cli");
+; 0000 0044 #asm("cli");
 	cli
-; 0000 0049  sleep_enable();
+; 0000 0045  sleep_enable();
 	RCALL _sleep_enable
-; 0000 004A  powerdown();
+; 0000 0046  powerdown();
 	RCALL _powerdown
-; 0000 004B }
+; 0000 0047 }
 	RET
 ;void conv(flash unsigned char *pic,unsigned int so )
-; 0000 004D {
+; 0000 0049 {
 _conv:
-; 0000 004E unsigned int ii=0,c;
-; 0000 004F unsigned char i,j;
-; 0000 0050 register unsigned char r=0,g=0,b=0;
-; 0000 0051 sr=so/16;
+; 0000 004A unsigned int ii=0,c;
+; 0000 004B unsigned char i,j;
+; 0000 004C register unsigned char r=0,g=0,b=0;
+; 0000 004D sr=so/16;
 	SBIW R28,3
 	LDI  R30,LOW(0)
 	ST   Y,R30
@@ -1922,22 +1918,22 @@ _conv:
 	LDD  R31,Y+9+1
 	RCALL __LSRW4
 	STS  _sr,R30
-; 0000 0052 
-; 0000 0053 for (j=0;j<=sr; j++)
+; 0000 004E 
+; 0000 004F for (j=0;j<=sr; j++)
 	LDI  R20,LOW(0)
 _0x8:
 	LDS  R30,_sr
 	CP   R30,R20
 	BRSH PC+2
 	RJMP _0x9
-; 0000 0054 {
-; 0000 0055 for(i=0; i<8 ; i++)
+; 0000 0050 {
+; 0000 0051 for(i=0; i<8 ; i++)
 	LDI  R21,LOW(0)
 _0xB:
 	CPI  R21,8
 	BRLO PC+2
 	RJMP _0xC
-; 0000 0056 {   if(ii>=so) ii=0;
+; 0000 0052 {   if(ii>=so) ii=0;
 	LDD  R30,Y+9
 	LDD  R31,Y+9+1
 	CP   R16,R30
@@ -1945,7 +1941,7 @@ _0xB:
 	BRSH PC+2
 	RJMP _0xD
 	__GETWRN 16,17,0
-; 0000 0057  c=pic[ii++]|(pic[ii++]<<8);
+; 0000 0053  c=pic[ii++]|(pic[ii++]<<8);
 _0xD:
 	MOVW R30,R16
 	__ADDWRN 16,17,1
@@ -1965,8 +1961,8 @@ _0xD:
 	OR   R30,R0
 	OR   R31,R1
 	MOVW R18,R30
-; 0000 0058 
-; 0000 0059  r=(0xF800 & c)>>11;
+; 0000 0054 
+; 0000 0055  r=(0xF800 & c)>>11;
 	MOVW R30,R18
 	ANDI R30,LOW(0xF800)
 	ANDI R31,HIGH(0xF800)
@@ -1974,7 +1970,7 @@ _0xD:
 	MOV  R30,R31
 	LDI  R31,0
 	STD  Y+8,R30
-; 0000 005A  g=(0x07E0 & c) >>5;
+; 0000 0056  g=(0x07E0 & c) >>5;
 	MOVW R30,R18
 	ANDI R30,LOW(0x7E0)
 	ANDI R31,HIGH(0x7E0)
@@ -1982,12 +1978,12 @@ _0xD:
 	ROR  R30
 	RCALL __LSRW4
 	STD  Y+7,R30
-; 0000 005B  b=(0x001F & c);
+; 0000 0057  b=(0x001F & c);
 	MOV  R30,R18
 	ANDI R30,LOW(0x1F)
 	STD  Y+6,R30
-; 0000 005C 
-; 0000 005D  rgb[j][0][i] =(float)r/31 * 130;
+; 0000 0058 
+; 0000 0059  rgb[j][0][i] =(float)r/31 * 130;
 	LDI  R26,LOW(24)
 	MUL  R20,R26
 	MOVW R30,R0
@@ -2015,7 +2011,7 @@ _0xD:
 	POP  R27
 	RCALL __CFD1U
 	ST   X,R30
-; 0000 005E  rgb[j][1][i] =(float)g/63  * 150;
+; 0000 005A  rgb[j][1][i] =(float)g/63  * 150;
 	LDI  R26,LOW(24)
 	MUL  R20,R26
 	MOVW R30,R0
@@ -2042,7 +2038,7 @@ _0xD:
 	POP  R27
 	RCALL __CFD1U
 	ST   X,R30
-; 0000 005F  rgb[j][2][i] = (float)b/31 * 150;
+; 0000 005B  rgb[j][2][i] = (float)b/31 * 150;
 	LDI  R26,LOW(24)
 	MUL  R20,R26
 	MOVW R30,R0
@@ -2069,183 +2065,183 @@ _0xD:
 	POP  R27
 	RCALL __CFD1U
 	ST   X,R30
-; 0000 0060 
-; 0000 0061 }
+; 0000 005C 
+; 0000 005D }
 _0xA:
 	SUBI R21,-1
 	RJMP _0xB
 _0xC:
-; 0000 0062 }
+; 0000 005E }
 _0x7:
 	SUBI R20,-1
 	RJMP _0x8
 _0x9:
-; 0000 0063 }
+; 0000 005F }
 	RCALL __LOADLOCR6
 	ADIW R28,13
 	RET
 ;void main(void)
-; 0000 0065 {
+; 0000 0061 {
 _main:
-; 0000 0066 unsigned char i=0;
-; 0000 0067     #asm("cli")
+; 0000 0062 unsigned char i=0;
+; 0000 0063     #asm("cli")
 ;	i -> R17
 	LDI  R17,0
 	cli
-; 0000 0068 // Declare your local variables here
-; 0000 0069 
-; 0000 006A // Input/Output Ports initialization
-; 0000 006B // Port B initialization
-; 0000 006C // Func7=In Func6=In Func5=In Func4=In Func3=Out Func2=Out Func1=Out Func0=In
-; 0000 006D // State7=T State6=T State5=T State4=T State3=0 State2=0 State1=0 State0=T
-; 0000 006E PORTB=0x00;
+; 0000 0064 // Declare your local variables here
+; 0000 0065 
+; 0000 0066 // Input/Output Ports initialization
+; 0000 0067 // Port B initialization
+; 0000 0068 // Func7=In Func6=In Func5=In Func4=In Func3=Out Func2=Out Func1=Out Func0=In
+; 0000 0069 // State7=T State6=T State5=T State4=T State3=0 State2=0 State1=0 State0=T
+; 0000 006A PORTB=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x18,R30
-; 0000 006F DDRB=0x0E;
+; 0000 006B DDRB=0x0E;
 	LDI  R30,LOW(14)
 	OUT  0x17,R30
-; 0000 0070 
-; 0000 0071 // Port C initialization
-; 0000 0072 // Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In
-; 0000 0073 // State6=P State5=T State4=T State3=T State2=T State1=T State0=T
-; 0000 0074 PORTC=0x40;
+; 0000 006C 
+; 0000 006D // Port C initialization
+; 0000 006E // Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In
+; 0000 006F // State6=P State5=T State4=T State3=T State2=T State1=T State0=T
+; 0000 0070 PORTC=0x40;
 	LDI  R30,LOW(64)
 	OUT  0x15,R30
-; 0000 0075 DDRC=0x00;
+; 0000 0071 DDRC=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x14,R30
-; 0000 0076 
-; 0000 0077 // Port D initialization
-; 0000 0078 // Func7=Out Func6=Out Func5=Out Func4=Out Func3=Out Func2=Out Func1=Out Func0=Out
-; 0000 0079 // State7=0 State6=0 State5=0 State4=0 State3=0 State2=0 State1=0 State0=0
-; 0000 007A PORTD=0x00;
+; 0000 0072 
+; 0000 0073 // Port D initialization
+; 0000 0074 // Func7=Out Func6=Out Func5=Out Func4=Out Func3=Out Func2=Out Func1=Out Func0=Out
+; 0000 0075 // State7=0 State6=0 State5=0 State4=0 State3=0 State2=0 State1=0 State0=0
+; 0000 0076 PORTD=0x00;
 	OUT  0x12,R30
-; 0000 007B DDRD=0xFF;
+; 0000 0077 DDRD=0xFF;
 	LDI  R30,LOW(255)
 	OUT  0x11,R30
-; 0000 007C 
-; 0000 007D 
-; 0000 007E 
-; 0000 007F 
-; 0000 0080 // Timer/Counter 0 initialization
-; 0000 0081 // Clock source: System Clock
-; 0000 0082 // Clock value: 250,000 kHz
-; 0000 0083 TCCR0=0x03;
+; 0000 0078 
+; 0000 0079 
+; 0000 007A 
+; 0000 007B 
+; 0000 007C // Timer/Counter 0 initialization
+; 0000 007D // Clock source: System Clock
+; 0000 007E // Clock value: 250,000 kHz
+; 0000 007F TCCR0=0x03;
 	LDI  R30,LOW(3)
 	OUT  0x33,R30
-; 0000 0084 TCNT0=180;
+; 0000 0080 TCNT0=180;
 	LDI  R30,LOW(180)
 	OUT  0x32,R30
-; 0000 0085 
-; 0000 0086 // Timer/Counter 1 initialization
-; 0000 0087 // Clock source: System Clock
-; 0000 0088 // Clock value: 2000,000 kHz
-; 0000 0089 // Mode: Fast PWM top=0x00FF
-; 0000 008A // OC1A output: Non-Inv.
-; 0000 008B // OC1B output: Non-Inv.
-; 0000 008C // Noise Canceler: Off
-; 0000 008D // Input Capture on Falling Edge
-; 0000 008E // Timer1 Overflow Interrupt: Off
-; 0000 008F // Input Capture Interrupt: Off
-; 0000 0090 // Compare A Match Interrupt: Off
-; 0000 0091 // Compare B Match Interrupt: Off
-; 0000 0092 TCCR1A=0xF1;
+; 0000 0081 
+; 0000 0082 // Timer/Counter 1 initialization
+; 0000 0083 // Clock source: System Clock
+; 0000 0084 // Clock value: 2000,000 kHz
+; 0000 0085 // Mode: Fast PWM top=0x00FF
+; 0000 0086 // OC1A output: Non-Inv.
+; 0000 0087 // OC1B output: Non-Inv.
+; 0000 0088 // Noise Canceler: Off
+; 0000 0089 // Input Capture on Falling Edge
+; 0000 008A // Timer1 Overflow Interrupt: Off
+; 0000 008B // Input Capture Interrupt: Off
+; 0000 008C // Compare A Match Interrupt: Off
+; 0000 008D // Compare B Match Interrupt: Off
+; 0000 008E TCCR1A=0xF1;
 	LDI  R30,LOW(241)
 	OUT  0x2F,R30
-; 0000 0093 //TCCR1B=0x09;
-; 0000 0094 TCCR1B=0x01;
+; 0000 008F //TCCR1B=0x09;
+; 0000 0090 TCCR1B=0x01;
 	LDI  R30,LOW(1)
 	OUT  0x2E,R30
-; 0000 0095 TCNT1H=0x00;
+; 0000 0091 TCNT1H=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x2D,R30
-; 0000 0096 TCNT1L=0x00;
+; 0000 0092 TCNT1L=0x00;
 	OUT  0x2C,R30
-; 0000 0097 ICR1H=0x00;
+; 0000 0093 ICR1H=0x00;
 	OUT  0x27,R30
-; 0000 0098 ICR1L=0x00;
+; 0000 0094 ICR1L=0x00;
 	OUT  0x26,R30
-; 0000 0099 OCR1AH=0x00;
+; 0000 0095 OCR1AH=0x00;
 	OUT  0x2B,R30
-; 0000 009A OCR1AL=0x00;
+; 0000 0096 OCR1AL=0x00;
 	OUT  0x2A,R30
-; 0000 009B OCR1BH=0x00;
+; 0000 0097 OCR1BH=0x00;
 	OUT  0x29,R30
-; 0000 009C OCR1BL=0x00;
+; 0000 0098 OCR1BL=0x00;
 	OUT  0x28,R30
-; 0000 009D 
-; 0000 009E // Timer/Counter 2 initialization
-; 0000 009F // Clock source: System Clock
-; 0000 00A0 // Clock value: 2000,000 kHz
-; 0000 00A1 // Mode: Fast PWM top=0xFF
-; 0000 00A2 // OC2 output: Non-Inverted PWM
-; 0000 00A3 ASSR=0x00;
+; 0000 0099 
+; 0000 009A // Timer/Counter 2 initialization
+; 0000 009B // Clock source: System Clock
+; 0000 009C // Clock value: 2000,000 kHz
+; 0000 009D // Mode: Fast PWM top=0xFF
+; 0000 009E // OC2 output: Non-Inverted PWM
+; 0000 009F ASSR=0x00;
 	OUT  0x22,R30
-; 0000 00A4 //TCCR2=0x79;
-; 0000 00A5  TCCR2=0x71;
+; 0000 00A0 //TCCR2=0x79;
+; 0000 00A1  TCCR2=0x71;
 	LDI  R30,LOW(113)
 	OUT  0x25,R30
-; 0000 00A6 TCNT2=0x00;
+; 0000 00A2 TCNT2=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x24,R30
-; 0000 00A7 OCR2=0x00;
+; 0000 00A3 OCR2=0x00;
 	OUT  0x23,R30
-; 0000 00A8 
-; 0000 00A9 // External Interrupt(s) initialization
-; 0000 00AA // INT0: Off
-; 0000 00AB // INT1: Off
-; 0000 00AC MCUCR=0x00;
+; 0000 00A4 
+; 0000 00A5 // External Interrupt(s) initialization
+; 0000 00A6 // INT0: Off
+; 0000 00A7 // INT1: Off
+; 0000 00A8 MCUCR=0x00;
 	OUT  0x35,R30
-; 0000 00AD 
-; 0000 00AE // Timer(s)/Counter(s) Interrupt(s) initialization
-; 0000 00AF TIMSK=0x45;
+; 0000 00A9 
+; 0000 00AA // Timer(s)/Counter(s) Interrupt(s) initialization
+; 0000 00AB TIMSK=0x45;
 	LDI  R30,LOW(69)
 	OUT  0x39,R30
-; 0000 00B0 
-; 0000 00B1 // USART initialization
-; 0000 00B2 // USART disabled
-; 0000 00B3 UCSRB=0x00;
+; 0000 00AC 
+; 0000 00AD // USART initialization
+; 0000 00AE // USART disabled
+; 0000 00AF UCSRB=0x00;
 	LDI  R30,LOW(0)
 	OUT  0xA,R30
-; 0000 00B4 
-; 0000 00B5 // Analog Comparator initialization
-; 0000 00B6 // Analog Comparator: Off
-; 0000 00B7 // Analog Comparator Input Capture by Timer/Counter 1: Off
-; 0000 00B8 ACSR=0x80;
+; 0000 00B0 
+; 0000 00B1 // Analog Comparator initialization
+; 0000 00B2 // Analog Comparator: Off
+; 0000 00B3 // Analog Comparator Input Capture by Timer/Counter 1: Off
+; 0000 00B4 ACSR=0x80;
 	LDI  R30,LOW(128)
 	OUT  0x8,R30
-; 0000 00B9 SFIOR=0x00;
+; 0000 00B5 SFIOR=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x30,R30
-; 0000 00BA 
-; 0000 00BB // ADC initialization
-; 0000 00BC // ADC disabled
-; 0000 00BD ADCSRA=0x00;
+; 0000 00B6 
+; 0000 00B7 // ADC initialization
+; 0000 00B8 // ADC disabled
+; 0000 00B9 ADCSRA=0x00;
 	OUT  0x6,R30
-; 0000 00BE 
-; 0000 00BF // SPI initialization
-; 0000 00C0 // SPI disabled
-; 0000 00C1 SPCR=0x00;
+; 0000 00BA 
+; 0000 00BB // SPI initialization
+; 0000 00BC // SPI disabled
+; 0000 00BD SPCR=0x00;
 	OUT  0xD,R30
-; 0000 00C2 
-; 0000 00C3 // TWI initialization
-; 0000 00C4 // TWI disabled
-; 0000 00C5 TWCR=0x00;
+; 0000 00BE 
+; 0000 00BF // TWI initialization
+; 0000 00C0 // TWI disabled
+; 0000 00C1 TWCR=0x00;
 	OUT  0x36,R30
-; 0000 00C6 
-; 0000 00C7 // Global enable interrupts
-; 0000 00C8 
-; 0000 00C9 if ((MCUCSR & 1)) { MCUCSR=0;
+; 0000 00C2 
+; 0000 00C3 // Global enable interrupts
+; 0000 00C4 
+; 0000 00C5 if ((MCUCSR & 1)) { MCUCSR=0;
 	IN   R30,0x34
 	SBRS R30,0
 	RJMP _0xE
 	LDI  R30,LOW(0)
 	OUT  0x34,R30
-; 0000 00CA 
-; 0000 00CB    OCR2=100;
+; 0000 00C6 
+; 0000 00C7    OCR2=100;
 	LDI  R30,LOW(100)
 	OUT  0x23,R30
-; 0000 00CC  for (i=0; i<8; i++) {  L   =1<<i; delay_ms(100);} OCR2=OCR1A=OCR1B=0;
+; 0000 00C8  for (i=0; i<8; i++) {  L   =1<<i; delay_ms(100);} OCR2=OCR1A=OCR1B=0;
 	LDI  R17,LOW(0)
 _0x10:
 	CPI  R17,8
@@ -2271,13 +2267,13 @@ _0x11:
 	OUT  0x2A+1,R31
 	OUT  0x2A,R30
 	OUT  0x23,R30
-; 0000 00CD 
-; 0000 00CE   OCR1A=100;
+; 0000 00C9 
+; 0000 00CA   OCR1A=100;
 	LDI  R30,LOW(100)
 	LDI  R31,HIGH(100)
 	OUT  0x2A+1,R31
 	OUT  0x2A,R30
-; 0000 00CF  for (i=0; i<8; i++) {  L   =1<<i;  delay_ms(100); } OCR2=OCR1A=OCR1B=0;
+; 0000 00CB  for (i=0; i<8; i++) {  L   =1<<i;  delay_ms(100); } OCR2=OCR1A=OCR1B=0;
 	LDI  R17,LOW(0)
 _0x13:
 	CPI  R17,8
@@ -2303,13 +2299,13 @@ _0x14:
 	OUT  0x2A+1,R31
 	OUT  0x2A,R30
 	OUT  0x23,R30
-; 0000 00D0 
-; 0000 00D1   OCR1B=100;
+; 0000 00CC 
+; 0000 00CD   OCR1B=100;
 	LDI  R30,LOW(100)
 	LDI  R31,HIGH(100)
 	OUT  0x28+1,R31
 	OUT  0x28,R30
-; 0000 00D2  for (i=0; i<8; i++) {  L   =1<<i;  delay_ms(100); }   OCR2=OCR1A=OCR1B=0;
+; 0000 00CE  for (i=0; i<8; i++) {  L   =1<<i;  delay_ms(100); }   OCR2=OCR1A=OCR1B=0;
 	LDI  R17,LOW(0)
 _0x16:
 	CPI  R17,8
@@ -2335,73 +2331,61 @@ _0x17:
 	OUT  0x2A+1,R31
 	OUT  0x2A,R30
 	OUT  0x23,R30
-; 0000 00D3   L=0;
+; 0000 00CF   L=0;
 	OUT  0x12,R30
-; 0000 00D4   type=0;
+; 0000 00D0   type=0;
 	LDI  R26,LOW(_type)
 	LDI  R27,HIGH(_type)
 	RCALL __EEPROMWRB
-; 0000 00D5 sleep();}
+; 0000 00D1 sleep();}
 	RCALL _sleep
-; 0000 00D6 
-; 0000 00D7 
-; 0000 00D8 if ((MCUCSR & 2))
+; 0000 00D2 
+; 0000 00D3       if ((MCUCSR & 2))
 _0xE:
 	IN   R30,0x34
 	SBRS R30,1
 	RJMP _0x18
-; 0000 00D9 {
-; 0000 00DA type=(type>ALL)?1:(type+1);
-	LDI  R26,LOW(_type)
-	LDI  R27,HIGH(_type)
-	RCALL __EEPROMRDB
-	CPI  R30,LOW(0xF)
-	BRSH PC+2
-	RJMP _0x19
-	LDI  R30,LOW(1)
-	RJMP _0x1A
-_0x19:
-	LDI  R26,LOW(_type)
-	LDI  R27,HIGH(_type)
-	RCALL __EEPROMRDB
-	LDI  R31,0
-	ADIW R30,1
-_0x1A:
-_0x1B:
-	LDI  R26,LOW(_type)
-	LDI  R27,HIGH(_type)
-	RCALL __EEPROMWRB
-; 0000 00DB MCUCSR=0; if(type>=ALL) {  type=0; sleep(); }
+; 0000 00D4 {
+; 0000 00D5 MCUCSR=0;
 	LDI  R30,LOW(0)
 	OUT  0x34,R30
+; 0000 00D6 type++;
+	LDI  R26,LOW(_type)
+	LDI  R27,HIGH(_type)
+	RCALL __EEPROMRDB
+	SUBI R30,-LOW(1)
+	RCALL __EEPROMWRB
+	SUBI R30,LOW(1)
+; 0000 00D7  if(type>=ALL){ type=0;  sleep(); }
 	LDI  R26,LOW(_type)
 	LDI  R27,HIGH(_type)
 	RCALL __EEPROMRDB
 	CPI  R30,LOW(0xE)
 	BRSH PC+2
-	RJMP _0x1C
+	RJMP _0x19
 	LDI  R26,LOW(_type)
 	LDI  R27,HIGH(_type)
 	LDI  R30,LOW(0)
 	RCALL __EEPROMWRB
 	RCALL _sleep
-; 0000 00DC }
-_0x1C:
-; 0000 00DD 
-; 0000 00DE 
-; 0000 00DF   switch(type)
+; 0000 00D8 }
+_0x19:
+; 0000 00D9 
+; 0000 00DA 
+; 0000 00DB 
+; 0000 00DC   switch(type)
 _0x18:
 	LDI  R26,LOW(_type)
 	LDI  R27,HIGH(_type)
 	RCALL __EEPROMRDB
 	LDI  R31,0
-; 0000 00E0   {
-; 0000 00E1   case 1:  conv(pp,sizeof(pp)); break;
+; 0000 00DD   {
+; 0000 00DE   case 1:  conv(pp,sizeof(pp)); break;
 	CPI  R30,LOW(0x1)
 	LDI  R26,HIGH(0x1)
 	CPC  R31,R26
 	BREQ PC+2
-	RJMP _0x20
+	RJMP _0x1D
 	LDI  R30,LOW(_pp*2)
 	LDI  R31,HIGH(_pp*2)
 	ST   -Y,R31
@@ -2411,14 +2395,14 @@ _0x18:
 	ST   -Y,R31
 	ST   -Y,R30
 	RCALL _conv
-	RJMP _0x1F
-; 0000 00E2    case 2:  conv(pp2,sizeof(pp2)); break;
-_0x20:
+	RJMP _0x1C
+; 0000 00DF    case 2:  conv(pp2,sizeof(pp2)); break;
+_0x1D:
 	CPI  R30,LOW(0x2)
 	LDI  R26,HIGH(0x2)
 	CPC  R31,R26
 	BREQ PC+2
-	RJMP _0x21
+	RJMP _0x1E
 	LDI  R30,LOW(_pp2*2)
 	LDI  R31,HIGH(_pp2*2)
 	ST   -Y,R31
@@ -2428,14 +2412,14 @@ _0x20:
 	ST   -Y,R31
 	ST   -Y,R30
 	RCALL _conv
-	RJMP _0x1F
-; 0000 00E3     case 3: conv(pp3,sizeof(pp3)); break;
-_0x21:
+	RJMP _0x1C
+; 0000 00E0     case 3: conv(pp3,sizeof(pp3)); break;
+_0x1E:
 	CPI  R30,LOW(0x3)
 	LDI  R26,HIGH(0x3)
 	CPC  R31,R26
 	BREQ PC+2
-	RJMP _0x22
+	RJMP _0x1F
 	LDI  R30,LOW(_pp3*2)
 	LDI  R31,HIGH(_pp3*2)
 	ST   -Y,R31
@@ -2445,14 +2429,14 @@ _0x21:
 	ST   -Y,R31
 	ST   -Y,R30
 	RCALL _conv
-	RJMP _0x1F
-; 0000 00E4      case 4:  conv(pp4,sizeof(pp4)); break;
-_0x22:
+	RJMP _0x1C
+; 0000 00E1      case 4:  conv(pp4,sizeof(pp4)); break;
+_0x1F:
 	CPI  R30,LOW(0x4)
 	LDI  R26,HIGH(0x4)
 	CPC  R31,R26
 	BREQ PC+2
-	RJMP _0x23
+	RJMP _0x20
 	LDI  R30,LOW(_pp4*2)
 	LDI  R31,HIGH(_pp4*2)
 	ST   -Y,R31
@@ -2462,14 +2446,14 @@ _0x22:
 	ST   -Y,R31
 	ST   -Y,R30
 	RCALL _conv
-	RJMP _0x1F
-; 0000 00E5       case 5:  conv(pp5,sizeof(pp5)); break;
-_0x23:
+	RJMP _0x1C
+; 0000 00E2       case 5:  conv(pp5,sizeof(pp5)); break;
+_0x20:
 	CPI  R30,LOW(0x5)
 	LDI  R26,HIGH(0x5)
 	CPC  R31,R26
 	BREQ PC+2
-	RJMP _0x24
+	RJMP _0x21
 	LDI  R30,LOW(_pp5*2)
 	LDI  R31,HIGH(_pp5*2)
 	ST   -Y,R31
@@ -2479,14 +2463,14 @@ _0x23:
 	ST   -Y,R31
 	ST   -Y,R30
 	RCALL _conv
-	RJMP _0x1F
-; 0000 00E6        case 6:  conv(pp6,sizeof(pp6)); break;
-_0x24:
+	RJMP _0x1C
+; 0000 00E3        case 6:  conv(pp6,sizeof(pp6)); break;
+_0x21:
 	CPI  R30,LOW(0x6)
 	LDI  R26,HIGH(0x6)
 	CPC  R31,R26
 	BREQ PC+2
-	RJMP _0x25
+	RJMP _0x22
 	LDI  R30,LOW(_pp6*2)
 	LDI  R31,HIGH(_pp6*2)
 	ST   -Y,R31
@@ -2496,14 +2480,14 @@ _0x24:
 	ST   -Y,R31
 	ST   -Y,R30
 	RCALL _conv
-	RJMP _0x1F
-; 0000 00E7         case 7:  conv(pp7,sizeof(pp7)); break;
-_0x25:
+	RJMP _0x1C
+; 0000 00E4         case 7:  conv(pp7,sizeof(pp7)); break;
+_0x22:
 	CPI  R30,LOW(0x7)
 	LDI  R26,HIGH(0x7)
 	CPC  R31,R26
 	BREQ PC+2
-	RJMP _0x26
+	RJMP _0x23
 	LDI  R30,LOW(_pp7*2)
 	LDI  R31,HIGH(_pp7*2)
 	ST   -Y,R31
@@ -2513,14 +2497,14 @@ _0x25:
 	ST   -Y,R31
 	ST   -Y,R30
 	RCALL _conv
-	RJMP _0x1F
-; 0000 00E8         case 8:  conv(pp8,sizeof(pp8)); break;
-_0x26:
+	RJMP _0x1C
+; 0000 00E5         case 8:  conv(pp8,sizeof(pp8)); break;
+_0x23:
 	CPI  R30,LOW(0x8)
 	LDI  R26,HIGH(0x8)
 	CPC  R31,R26
 	BREQ PC+2
-	RJMP _0x27
+	RJMP _0x24
 	LDI  R30,LOW(_pp8*2)
 	LDI  R31,HIGH(_pp8*2)
 	ST   -Y,R31
@@ -2530,14 +2514,14 @@ _0x26:
 	ST   -Y,R31
 	ST   -Y,R30
 	RCALL _conv
-	RJMP _0x1F
-; 0000 00E9          case 9:  conv(pp9,sizeof(pp9)); break;
-_0x27:
+	RJMP _0x1C
+; 0000 00E6          case 9:  conv(pp9,sizeof(pp9)); break;
+_0x24:
 	CPI  R30,LOW(0x9)
 	LDI  R26,HIGH(0x9)
 	CPC  R31,R26
 	BREQ PC+2
-	RJMP _0x28
+	RJMP _0x25
 	LDI  R30,LOW(_pp9*2)
 	LDI  R31,HIGH(_pp9*2)
 	ST   -Y,R31
@@ -2547,14 +2531,14 @@ _0x27:
 	ST   -Y,R31
 	ST   -Y,R30
 	RCALL _conv
-	RJMP _0x1F
-; 0000 00EA           case 10:  conv(pp10,sizeof(pp10)); break;
-_0x28:
+	RJMP _0x1C
+; 0000 00E7           case 10:  conv(pp10,sizeof(pp10)); break;
+_0x25:
 	CPI  R30,LOW(0xA)
 	LDI  R26,HIGH(0xA)
 	CPC  R31,R26
 	BREQ PC+2
-	RJMP _0x29
+	RJMP _0x26
 	LDI  R30,LOW(_pp10*2)
 	LDI  R31,HIGH(_pp10*2)
 	ST   -Y,R31
@@ -2564,14 +2548,14 @@ _0x28:
 	ST   -Y,R31
 	ST   -Y,R30
 	RCALL _conv
-	RJMP _0x1F
-; 0000 00EB            case 11:  conv(pp11,sizeof(pp11)); break;
-_0x29:
+	RJMP _0x1C
+; 0000 00E8            case 11:  conv(pp11,sizeof(pp11)); break;
+_0x26:
 	CPI  R30,LOW(0xB)
 	LDI  R26,HIGH(0xB)
 	CPC  R31,R26
 	BREQ PC+2
-	RJMP _0x2A
+	RJMP _0x27
 	LDI  R30,LOW(_pp11*2)
 	LDI  R31,HIGH(_pp11*2)
 	ST   -Y,R31
@@ -2581,14 +2565,14 @@ _0x29:
 	ST   -Y,R31
 	ST   -Y,R30
 	RCALL _conv
-	RJMP _0x1F
-; 0000 00EC             case 12:  conv(pp12,sizeof(pp12)); break;
-_0x2A:
+	RJMP _0x1C
+; 0000 00E9             case 12:  conv(pp12,sizeof(pp12)); break;
+_0x27:
 	CPI  R30,LOW(0xC)
 	LDI  R26,HIGH(0xC)
 	CPC  R31,R26
 	BREQ PC+2
-	RJMP _0x2B
+	RJMP _0x28
 	LDI  R30,LOW(_pp12*2)
 	LDI  R31,HIGH(_pp12*2)
 	ST   -Y,R31
@@ -2598,14 +2582,14 @@ _0x2A:
 	ST   -Y,R31
 	ST   -Y,R30
 	RCALL _conv
-	RJMP _0x1F
-; 0000 00ED             case 13:  conv(pp13,sizeof(pp13)); break;
-_0x2B:
+	RJMP _0x1C
+; 0000 00EA             case 13:  conv(pp13,sizeof(pp13)); break;
+_0x28:
 	CPI  R30,LOW(0xD)
 	LDI  R26,HIGH(0xD)
 	CPC  R31,R26
 	BREQ PC+2
-	RJMP _0x1F
+	RJMP _0x2A
 	LDI  R30,LOW(_pp13*2)
 	LDI  R31,HIGH(_pp13*2)
 	ST   -Y,R31
@@ -2615,20 +2599,29 @@ _0x2B:
 	ST   -Y,R31
 	ST   -Y,R30
 	RCALL _conv
-; 0000 00EE   }
-_0x1F:
-; 0000 00EF 
-; 0000 00F0  #asm("sei")
+	RJMP _0x1C
+; 0000 00EB             default: type=0;
+_0x2A:
+	LDI  R26,LOW(_type)
+	LDI  R27,HIGH(_type)
+	LDI  R30,LOW(0)
+	RCALL __EEPROMWRB
+; 0000 00EC   #asm("RJMP 0")
+	RJMP 0
+; 0000 00ED   }
+_0x1C:
+; 0000 00EE 
+; 0000 00EF  #asm("sei")
 	sei
-; 0000 00F1   while(1){     }
+; 0000 00F0   while(1){     }
+_0x2B:
+	RJMP _0x2B
 _0x2D:
-	RJMP _0x2D
-_0x2F:
+; 0000 00F1 
 ; 0000 00F2 
-; 0000 00F3 
-; 0000 00F4 }
-_0x30:
-	RJMP _0x30
+; 0000 00F3 }
+_0x2E:
+	RJMP _0x2E
 	#ifndef __SLEEP_DEFINED__
 	#define __SLEEP_DEFINED__
 	.EQU __se_bit=0x80

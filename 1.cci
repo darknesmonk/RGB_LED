@@ -1,4 +1,4 @@
-VERSION:3 SOURCE_TIMESTAMP:472545A8
+VERSION:3 SOURCE_TIMESTAMP:472549C6
 NODE:M LEVEL:0 LINE:24 "L"
 NODE:I LEVEL:0 LINE:25 "D:\prog\Atmega8\color\led.c"
 NODE:I LEVEL:0 LINE:26 "C:\cvavreval\inc\mega8.h"
@@ -14,5 +14,5 @@ NODE:F LEVEL:0 LINE:36 "timer1_ovf_isr(void)"
 NODE:F LEVEL:0 LINE:44 "timer2_ovf_isr(void)"
 NODE:F LEVEL:0 LINE:57 "timer0_ovf_isr(void)"
 NODE:F LEVEL:0 LINE:65 "sleep(void)"
-NODE:F LEVEL:0 LINE:76 "conv(flash unsigned char * pic,unsigned int so)"
-NODE:F LEVEL:0 LINE:100 "main(void)"
+NODE:F LEVEL:0 LINE:72 "conv(flash unsigned char * pic,unsigned int so)"
+NODE:F LEVEL:0 LINE:96 "main(void)"

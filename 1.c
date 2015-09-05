@@ -64,10 +64,6 @@ step=(step>=sr)?0:(step+1);
 // Declare your global variables here
 void sleep()
 {
-//unsigned char x;
-//x = (MCUCR & ~(1 << BODSE)) | (1 << BODS); // подготовка бит
-//MCUCR = x | (1 << BODSE); // процедура отключения BOD
-//MCUCR = x;
 MCUCR=0x00; 
 #asm("cli");
  sleep_enable(); 
@@ -212,12 +208,13 @@ if ((MCUCSR & 1)) { MCUCSR=0;
   type=0;
 sleep();}      
 
-
-if ((MCUCSR & 2))
+      if ((MCUCSR & 2))
 {
-type=(type>ALL)?1:(type+1);
-MCUCSR=0; if(type>=ALL) {  type=0; sleep(); }
+MCUCSR=0;
+type++;
+ if(type>=ALL){ type=0;  sleep(); } 
 }
+
 
 
   switch(type)
@@ -234,7 +231,9 @@ MCUCSR=0; if(type>=ALL) {  type=0; sleep(); }
           case 10:  conv(pp10,sizeof(pp10)); break;      
            case 11:  conv(pp11,sizeof(pp11)); break;
             case 12:  conv(pp12,sizeof(pp12)); break;   
-            case 13:  conv(pp13,sizeof(pp13)); break;
+            case 13:  conv(pp13,sizeof(pp13)); break;    
+            default: type=0; 
+  #asm("RJMP 0")
   }
    
  #asm("sei")
